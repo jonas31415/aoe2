@@ -1,3 +1,4 @@
+from all_civs_available import all_civs_available
 from aoe2_api import get_match_history_of_player_with_steam_id, filter_for_single_games, filter_for_double_games
 
 if __name__ == "__main__":
@@ -6,5 +7,7 @@ if __name__ == "__main__":
     # steam_id = input("Enter your AOE2 name: ")
     player_name = "Lungaharing"
     all_games = get_match_history_of_player_with_steam_id(steam_id)
-    print(filter_for_single_games(all_games))
-    # print(filter_for_double_games)
+    single_games = filter_for_single_games(all_games, player_name)
+    for game in single_games:
+        print(f"My Civ: {game.my_civ}, Opponent civ: {game.opponent_civ}")
+    double_games = filter_for_double_games(all_games, player_name)

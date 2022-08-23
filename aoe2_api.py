@@ -1,6 +1,8 @@
 import requests
 
 # api-endpoint-url
+from all_civs_available import all_civs_available
+
 BASE_URL = "https://aoe2.net/api"
 
 
@@ -25,25 +27,41 @@ def get_match_history_of_player_with_steam_id(steam_id: str):
     return data
 
 
-def extract_single_match_attributes_from_json(single_games):
-    pass
+def extract_single_match_attributes_from_json(single_games, my_aoe_name):
+    single_games_with_relevant_attributes = []
+    my_civ = ''
+    opponent_civ = ''
+    for game in single_games:
+        falsy = False
+        for player in game['players']:
+            if player['civ'] > 42:
+                falsy = True
+                continue
+            if player['name'] == my_aoe_name:
+                my_civ = all_civs_available[player['civ']-1]
+            else:
+                opponent_civ = all_civs_available[player['civ']-1]
+        if not falsy:
+            single_games_with_relevant_attributes.append(SingleMatch(my_civ, opponent_civ))
+    return single_games_with_relevant_attributes
 
 
-def filter_for_single_games(all_games):
+def filter_for_single_games(all_games, my_aoe_name):
     single_games = []
     for game in all_games:
         if game['num_players'] == 2:
             single_games.append(game)
-    return extract_single_match_attributes_from_json(single_games)
+    return extract_single_match_attributes_from_json(single_games, my_aoe_name)
 
 
-def extract_double_match_attributes_from_json(double_games):
+def extract_double_match_attributes_from_json(double_games, my_aoe_name):
+
     pass
 
 
-def filter_for_double_games(all_games):
+def filter_for_double_games(all_games, my_aoe_name):
     double_games = []
     for game in all_games:
         if game['num_players'] == 4:
             double_games.append(game)
-    return extract_double_match_attributes_from_json(double_games)
+    return extract_double_match_attributes_from_json(double_games, my_aoe_name)
