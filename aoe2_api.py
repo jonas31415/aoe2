@@ -7,9 +7,12 @@ BASE_URL = "https://aoe2.net/api"
 
 
 class SingleMatch:
-    def __init__(self, my_civ, opponent_civ):
+    def __init__(self, won, my_civ, my_civ_index, opponent_civ, opponent_civ_index):
+        self.won = won
         self.my_civ = my_civ
+        self.my_civ_index = my_civ_index
         self.opponent_civ = opponent_civ
+        self.opponent_civ_index = opponent_civ_index
         
 
 class DoubleMatch:
@@ -30,7 +33,10 @@ def get_match_history_of_player_with_steam_id(steam_id: str):
 def extract_single_match_attributes_from_json(single_games, my_aoe_name):
     single_games_with_relevant_attributes = []
     my_civ = ''
+    my_civ_index = 0
     opponent_civ = ''
+    opponent_civ_index = 0
+    won = False
     for game in single_games:
         falsy = False
         for player in game['players']:
@@ -39,10 +45,14 @@ def extract_single_match_attributes_from_json(single_games, my_aoe_name):
                 continue
             if player['name'] == my_aoe_name:
                 my_civ = all_civs_available[player['civ']-1]
+                my_civ_index = player['civ']-1
+                won = player['won']
             else:
                 opponent_civ = all_civs_available[player['civ']-1]
+                opponent_civ_index = player['civ']-1
         if not falsy:
-            single_games_with_relevant_attributes.append(SingleMatch(my_civ, opponent_civ))
+            single_games_with_relevant_attributes.append(SingleMatch(won, my_civ, my_civ_index,
+                                                                     opponent_civ, opponent_civ_index))
     return single_games_with_relevant_attributes
 
 
@@ -55,7 +65,7 @@ def filter_for_single_games(all_games, my_aoe_name):
 
 
 def extract_double_match_attributes_from_json(double_games, my_aoe_name):
-
+    # TODO
     pass
 
 
