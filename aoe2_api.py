@@ -25,7 +25,7 @@ class DoubleMatch:
         
 # sending get request and saving the response as response object
 def get_match_history_of_player_with_steam_id(steam_id: str):
-    r = requests.get(url=f"{BASE_URL}/player/matches?game=aoe2de&steam_id={steam_id}&count=100")
+    r = requests.get(url=f"{BASE_URL}/player/matches?game=aoe2de&steam_id={steam_id}&count=1000")
     data = r.json()
     return data
 
